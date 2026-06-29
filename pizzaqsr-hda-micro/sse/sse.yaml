@@ -1,0 +1,9 @@
+
+app: pizzaqsr-hda-micro
+
+http:
+  host: "127.0.0.1"
+  port: 4511
+
+logging:
+  level: info

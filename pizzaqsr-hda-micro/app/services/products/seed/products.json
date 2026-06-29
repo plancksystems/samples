@@ -1,0 +1,6 @@
+[
+  { "ProductID": 1, "SKU": "PIZ-MARG-M", "Name": "Margherita Pizza", "Description": "Classic tomato, mozzarella, basil", "CategoryID": 1, "BasePrice": 299.0, "ImageURL": "/img/margherita.jpg", "Attributes": "{\"veg\":true}", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" },
+  { "ProductID": 2, "SKU": "PIZ-PEPP-L", "Name": "Pepperoni Pizza", "Description": "Loaded pepperoni & cheese", "CategoryID": 1, "BasePrice": 449.0, "ImageURL": "/img/pepperoni.jpg", "Attributes": "{\"veg\":false}", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" },
+  { "ProductID": 3, "SKU": "BEV-COLA-500", "Name": "Cola 500ml", "Description": "Chilled soft drink", "CategoryID": 2, "BasePrice": 60.0, "ImageURL": "/img/cola.jpg", "Attributes": "", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" },
+  { "ProductID": 4, "SKU": "SID-GBRD", "Name": "Garlic Bread", "Description": "Oven-baked with herb butter", "CategoryID": 3, "BasePrice": 149.0, "ImageURL": "/img/garlic-bread.jpg", "Attributes": "{\"veg\":true}", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" }
+]

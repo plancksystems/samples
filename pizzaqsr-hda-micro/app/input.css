@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@source "./public/**/*.html";
+@source "./services/*/src/**/*.zsx";
+@source "./services/*/src/**/*.zig";
+
+@source "../sse/src/**/*.zsx";
+@source "../sse/src/**/*.zig";

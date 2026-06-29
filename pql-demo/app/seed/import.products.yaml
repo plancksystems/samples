@@ -1,0 +1,18 @@
+store: products
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: products
+    role: parent
+    file: products.json
+    fields:
+      - name: ProductID
+        type: int
+      - name: MakeFlag
+        type: int
+      - name: SubCategoryID
+        type: int
+      - name: StandardCost
+        type: double
+      - name: ListPrice
+        type: double

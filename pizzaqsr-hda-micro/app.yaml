@@ -1,0 +1,6 @@
+app:
+  name: pizzaqsr-hda-micro
+  description: "Pizzaqsr — HDA micro sample (datastar shell + WASM services + SSE service, CORS-direct)"
+  port: 4100
+  address: 127.0.0.1
+

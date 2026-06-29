@@ -1,0 +1,5 @@
+app:
+  name: pizzaqsr-hda-mono
+  description: "Pizzaqsr — HDA monolith sample (Datastar + planck/db WASM)"
+  port: 4300
+  address: 127.0.0.1

@@ -1,0 +1,13 @@
+[
+  {
+    "CartID": 1,
+    "CustomerID": "3",
+    "Status": "open",
+    "Items": [
+      { "ProductID": 2, "Name": "Pepperoni Pizza", "UnitPrice": 449.0, "Qty": 1, "LineTotal": 449.0, "AddedAt": "1718416800" }
+    ],
+    "SubTotal": 449.0,
+    "CreatedAt": "1718416800",
+    "UpdatedAt": "1718416800"
+  }
+]

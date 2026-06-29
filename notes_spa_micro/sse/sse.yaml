@@ -1,0 +1,16 @@
+
+app: notes_spa_micro
+
+http:
+  host: "127.0.0.1"
+  port: 4502
+
+ssehub:
+  heartbeat_interval_ms: 15000
+
+  retry_ms: 3000
+
+  subscriber_queue_size: 256
+
+logging:
+  level: info

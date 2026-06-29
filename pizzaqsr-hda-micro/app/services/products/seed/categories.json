@@ -1,0 +1,5 @@
+[
+  { "CategoryID": 1, "Name": "Pizzas", "Description": "Wood-fired pizzas", "CreatedAt": "1718409600" },
+  { "CategoryID": 2, "Name": "Beverages", "Description": "Soft drinks & juices", "CreatedAt": "1718409600" },
+  { "CategoryID": 3, "Name": "Sides", "Description": "Garlic bread, wings & more", "CreatedAt": "1718409600" }
+]

@@ -1,0 +1,63 @@
+const std = @import("std");
+const Cart = @import("../models/cart.zig").Cart;
+
+pub const CartDrawer = struct {
+    cart: Cart,
+
+    pub fn render(self: CartDrawer, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <div id="cart-drawer" class="h-full flex flex-col absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl">
+                <header class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+                    <h2 class="text-lg font-semibold text-slate-800">Your cart</h2>
+                    <button type="button" data-on:click="$cartOpen = false" class="cursor-pointer text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
+                </header>
+
+                {if self.cart.Items.len == 0}
+                    <div class="flex-1 flex flex-col items-center justify-center text-slate-400 px-6 text-center">
+                        <span class="text-5xl mb-3">🛒</span>
+                        <p class="text-sm">Your cart is empty</p>
+                        <p class="text-xs mt-1">Add some pizza to get started</p>
+                    </div>
+                {else}
+                    <ul class="flex-1 overflow-y-auto divide-y divide-slate-100">
+                        {for it in self.cart.Items}
+                            <li class="flex items-start gap-3 p-4">
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-slate-800 line-clamp-2 text-sm">{it.Name}</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">₹{it.UnitPrice} each</p>
+                                    <div class="mt-2 inline-flex items-center gap-2">
+                                        <button class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold leading-none"
+                                                data-on:click="@put('/items', {contentType: 'json', payload: {productId: ${it.ProductID}, qty: ${it.Qty - 1}}})"
+                                                title="Decrease">−</button>
+                                        <span class="text-sm font-medium w-6 text-center">{it.Qty}</span>
+                                        <button class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold leading-none"
+                                                data-on:click="@put('/items', {contentType: 'json', payload: {productId: ${it.ProductID}, qty: ${it.Qty + 1}}})"
+                                                title="Increase">+</button>
+                                    </div>
+                                </div>
+                                <div class="text-right shrink-0">
+                                    <p class="text-sm font-semibold text-slate-800">₹{it.LineTotal}</p>
+                                    <button class="mt-1 text-xs text-red-500 hover:underline"
+                                            data-on:click="@delete('/items?productId=${it.ProductID}')"
+                                            title="Remove">Remove</button>
+                                </div>
+                            </li>
+                        {/for}
+                    </ul>
+
+                    <footer class="border-t border-slate-200 px-5 py-4">
+                        <div class="flex items-center justify-between text-sm mb-3">
+                            <span class="text-slate-500">Subtotal</span>
+                            <span class="font-semibold text-slate-800">₹{self.cart.computeSubtotal()}</span>
+                        </div>
+                        <button type="button"
+                                data-on:click="$cartOpen = false; @get('/checkout')"
+                                class="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                            Proceed to checkout
+                        </button>
+                    </footer>
+                {/if}
+            </div>
+        );
+    }
+};

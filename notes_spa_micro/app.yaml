@@ -1,0 +1,6 @@
+app:
+  name: notes_spa_micro
+  description: "SPA micro shell (Vue SPA bundle, browser hits services directly via CORS)"
+  port: 4002
+  address: 127.0.0.1
+

@@ -1,0 +1,26 @@
+[
+  {
+    "NoteID": 1,
+    "Title": "Welcome to Notes",
+    "Body": "This is your first note. Edit it, delete it, or create your own.",
+    "Tags": "intro,getting-started",
+    "CreatedAt": 1718064000000,
+    "UpdatedAt": 1718064000000
+  },
+  {
+    "NoteID": 2,
+    "Title": "Shopping list",
+    "Body": "Milk, eggs, bread, coffee.",
+    "Tags": "errands,home",
+    "CreatedAt": 1718150400000,
+    "UpdatedAt": 1718236800000
+  },
+  {
+    "NoteID": 3,
+    "Title": "Planck ideas",
+    "Body": "Try the Watch RPC for live updates and a secondary index on UpdatedAt.",
+    "Tags": "planck,ideas",
+    "CreatedAt": 1718323200000,
+    "UpdatedAt": 1718409600000
+  }
+]

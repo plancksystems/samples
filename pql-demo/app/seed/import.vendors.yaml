@@ -1,0 +1,14 @@
+store: vendors
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: vendors
+    role: parent
+    file: vendors.json
+    fields:
+      - name: VendorID
+        type: int
+      - name: CreditRating
+        type: int
+      - name: ActiveFlag
+        type: int

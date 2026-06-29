@@ -1,0 +1,14 @@
+store: notes
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/notes_spa_mono/app/seed
+entities:
+  - name: notes
+    role: parent
+    file: notes.json
+    fields:
+      - name: NoteID
+        type: int
+      - name: CreatedAt
+        type: int
+      - name: UpdatedAt
+        type: int

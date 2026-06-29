@@ -1,0 +1,20 @@
+store: orders
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: orders
+    role: parent
+    file: orders.json
+    fields:
+      - name: EmployeeID
+        type: int
+      - name: CustomerID
+        type: int
+      - name: SubTotal
+        type: double
+      - name: TaxAmt
+        type: double
+      - name: Freight
+        type: double
+      - name: TotalDue
+        type: double

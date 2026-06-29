@@ -1,0 +1,10 @@
+store: categories
+format: bson
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-mono/app/seed/exports
+entities:
+  - name: categories
+    role: parent
+    file: categories.bson
+    fields:
+      - name: CategoryID
+        type: int

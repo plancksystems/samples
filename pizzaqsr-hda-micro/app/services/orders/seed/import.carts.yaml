@@ -1,0 +1,12 @@
+store: carts
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-micro/app/services/orders/seed
+entities:
+  - name: carts
+    role: parent
+    file: carts.json
+    fields:
+      - name: CartID
+        type: int
+      - name: SubTotal
+        type: double

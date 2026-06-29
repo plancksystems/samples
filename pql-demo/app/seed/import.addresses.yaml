@@ -1,0 +1,18 @@
+store: addresses
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: addresses
+    role: parent
+    file: addresses.json
+    fields:
+      - name: Street
+        type: string
+      - name: City
+        type: string
+      - name: State
+        type: string
+      - name: ZipCode
+        type: string
+      - name: Country
+        type: string

@@ -1,0 +1,26 @@
+store: orders
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-micro/app/services/orders/seed
+entities:
+  - name: orders
+    role: parent
+    file: orders.json
+    fields:
+      - name: OrderID
+        type: int
+      - name: SubTotal
+        type: double
+      - name: Tax
+        type: double
+      - name: DeliveryFee
+        type: double
+      - name: Total
+        type: double
+      - name: KitchenID
+        type: int
+      - name: KitchenWorkerID
+        type: int
+      - name: DeliveryPartnerID
+        type: int
+      - name: CreatedAtMillis
+        type: int

@@ -1,0 +1,44 @@
+[
+  {
+    "OrderID": 1,
+    "OrderKey": "a1b2c3d4e5f6",
+    "CustomerID": "3",
+    "Status": "Paid",
+    "Items": [
+      { "ProductID": 1, "Name": "Margherita Pizza", "UnitPrice": 299.0, "Qty": 2, "LineTotal": 598.0 }
+    ],
+    "SubTotal": 598.0,
+    "Tax": 29.9,
+    "DeliveryFee": 40.0,
+    "Total": 667.9,
+    "DeliveryAddress": { "Label": "Home", "Line1": "12 MG Road", "Line2": "Apt 4", "City": "Bengaluru", "State": "KA", "Pincode": "560001", "Lat": 12.9716, "Lng": 77.5946 },
+    "KitchenID": 1,
+    "KitchenWorkerID": 0,
+    "DeliveryPartnerID": 0,
+    "PaymentIntentID": "pi_test_001",
+    "CreatedAt": "1718409600",
+    "CreatedAtMillis": 1718409600000,
+    "UpdatedAt": "1718409600"
+  },
+  {
+    "OrderID": 2,
+    "OrderKey": "f6e5d4c3b2a1",
+    "CustomerID": "3",
+    "Status": "AwaitingPayment",
+    "Items": [
+      { "ProductID": 3, "Name": "Cola 500ml", "UnitPrice": 60.0, "Qty": 3, "LineTotal": 180.0 }
+    ],
+    "SubTotal": 180.0,
+    "Tax": 9.0,
+    "DeliveryFee": 40.0,
+    "Total": 229.0,
+    "DeliveryAddress": { "Label": "Work", "Line1": "99 Tech Park", "Line2": "", "City": "Bengaluru", "State": "KA", "Pincode": "560100", "Lat": 12.93, "Lng": 77.69 },
+    "KitchenID": 0,
+    "KitchenWorkerID": 0,
+    "DeliveryPartnerID": 0,
+    "PaymentIntentID": "",
+    "CreatedAt": "1718413200",
+    "CreatedAtMillis": 1718413200000,
+    "UpdatedAt": "1718413200"
+  }
+]

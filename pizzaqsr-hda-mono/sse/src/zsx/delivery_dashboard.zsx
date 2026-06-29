@@ -1,0 +1,106 @@
+const std = @import("std");
+const Order = @import("../models/order.zig").Order;
+
+pub const DeliveryDashboard = struct {
+    orders: []Order,
+    sse_init: []const u8 = "",
+
+    pub fn render(self: DeliveryDashboard, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <div id="content" class="max-w-6xl mx-auto p-4 lg:p-6"
+                 data-init="${self.sse_init}">
+                <header class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">🛵</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-800">Delivery</h1>
+                            <p class="text-xs text-slate-500">Pick up Ready orders and mark Delivered when handed off.</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-slate-500 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Live
+                    </span>
+                </header>
+
+                {if self.orders.len == 0}
+                    <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center">
+                        <div class="text-5xl mb-3">🪧</div>
+                        <p class="text-sm font-medium text-slate-700">Nothing to deliver right now</p>
+                        <p class="text-xs text-slate-400 mt-1">Ready orders will appear here as the kitchen completes them.</p>
+                    </div>
+                {else}
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <section>
+                            <div class="flex items-center justify-between mb-2 px-1">
+                                <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Ready</h2>
+                                <span class="text-xs text-slate-400">pick up from kitchen</span>
+                            </div>
+                            <div class="space-y-3">
+                                {for o in self.orders}
+                                    {if o.isStatusCurrent("Ready")}
+                                        <article class="bg-white rounded-xl border border-emerald-200 shadow-sm overflow-hidden">
+                                            <header class="px-4 py-3 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
+                                                <p class="font-semibold text-slate-800 text-sm">Order #{o.OrderID}</p>
+                                                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-600 text-white">Ready</span>
+                                            </header>
+                                            <div class="px-4 py-3 space-y-2 text-xs text-slate-600">
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{o.DeliveryAddress.Line1}</p>
+                                                    <p class="text-slate-500">{o.DeliveryAddress.City}, {o.DeliveryAddress.State} {o.DeliveryAddress.Pincode}</p>
+                                                </div>
+                                                <div class="flex items-center justify-between border-t border-slate-100 pt-2">
+                                                    <span>{o.Items.len} item(s)</span>
+                                                    <span class="font-semibold text-slate-800">₹{o.Total}</span>
+                                                </div>
+                                            </div>
+                                            <div class="px-4 pb-4">
+                                                <button type="button"
+                                                        data-on:click="@post('/orders/${o.OrderKey}/status', {contentType: 'json', payload: {from: 'Ready', to: 'OutForDelivery'}})"
+                                                        class="w-full py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+                                                    Pick up
+                                                </button>
+                                            </div>
+                                        </article>
+                                    {/if}
+                                {/for}
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="flex items-center justify-between mb-2 px-1">
+                                <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Out for delivery</h2>
+                                <span class="text-xs text-slate-400">on the way</span>
+                            </div>
+                            <div class="space-y-3">
+                                {for o in self.orders}
+                                    {if o.isStatusCurrent("OutForDelivery")}
+                                        <article class="bg-white rounded-xl border border-blue-200 shadow-sm overflow-hidden">
+                                            <header class="px-4 py-3 bg-blue-50 border-b border-blue-100 flex items-center justify-between">
+                                                <p class="font-semibold text-slate-800 text-sm">Order #{o.OrderID}</p>
+                                                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-600 text-white">In transit</span>
+                                            </header>
+                                            <div class="px-4 py-3 space-y-2 text-xs text-slate-600">
+                                                <div>
+                                                    <p class="font-medium text-slate-800">{o.DeliveryAddress.Line1}</p>
+                                                    <p class="text-slate-500">{o.DeliveryAddress.City}, {o.DeliveryAddress.State} {o.DeliveryAddress.Pincode}</p>
+                                                </div>
+                                            </div>
+                                            <div class="px-4 pb-4">
+                                                <button type="button"
+                                                        data-on:click="@post('/orders/${o.OrderKey}/status', {contentType: 'json', payload: {from: 'OutForDelivery', to: 'Delivered'}})"
+                                                        class="w-full py-2 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
+                                                    Mark delivered
+                                                </button>
+                                            </div>
+                                        </article>
+                                    {/if}
+                                {/for}
+                            </div>
+                        </section>
+                    </div>
+                {/if}
+            </div>
+        );
+    }
+};

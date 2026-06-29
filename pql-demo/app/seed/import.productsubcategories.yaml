@@ -1,0 +1,12 @@
+store: productsubcategories
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: productsubcategories
+    role: parent
+    file: productsubcategories.json
+    fields:
+      - name: SubCategoryID
+        type: int
+      - name: CategoryID
+        type: int

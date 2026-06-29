@@ -1,0 +1,14 @@
+{
+  "name": "eshop",
+  "version": "0.1.0",
+  "description": "sample project",
+  "scripts": {
+    "build:css": "tailwindcss -i input.css -o public/index.css --minify"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0"
+  }
+}

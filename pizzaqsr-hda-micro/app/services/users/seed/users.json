@@ -1,0 +1,5 @@
+[
+  { "UserID": 1, "GoogleSub": "sub_admin_001", "Email": "admin@pizzaqsr.test", "Name": "Admin User", "Role": "admin", "Phone": "9990000001", "Status": "active", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" },
+  { "UserID": 2, "GoogleSub": "", "Email": "chef@pizzaqsr.test", "Name": "Kitchen Chef", "Role": "kitchen", "Phone": "9990000002", "Status": "active", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" },
+  { "UserID": 3, "GoogleSub": "sub_cust_010", "Email": "asha@example.com", "Name": "Asha Rao", "Role": "customer", "Phone": "9876543210", "Status": "active", "CreatedAt": "1718409600", "UpdatedAt": "1718409600" }
+]

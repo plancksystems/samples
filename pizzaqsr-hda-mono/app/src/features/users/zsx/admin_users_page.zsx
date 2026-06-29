@@ -1,0 +1,84 @@
+const std = @import("std");
+const User = @import("../models/user.zig").User;
+
+pub const AdminUsersPage = struct {
+    users: []User,
+
+    pub fn render(self: AdminUsersPage, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <div id="content" class="max-w-5xl mx-auto p-4 lg:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <section class="md:col-span-2 bg-white border border-slate-200 rounded-xl overflow-hidden">
+                    <header class="px-5 py-4 border-b border-slate-200">
+                        <h2 class="text-lg font-semibold text-slate-800">Users</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Promote staff to kitchen or delivery roles. The first signed-in user is auto-admin.</p>
+                    </header>
+
+                    {if self.users.len == 0}
+                        <div class="px-5 py-10 text-center text-sm text-slate-400">
+                            No users yet. Sign in or create one →
+                        </div>
+                    {else}
+                        <ul class="divide-y divide-slate-100">
+                            {for u in self.users}
+                                <li class="px-5 py-3 flex items-center justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <p class="font-medium text-slate-800 text-sm">{u.Name}</p>
+                                        <p class="text-xs text-slate-400 mt-0.5">{u.Email}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{u.Role}</span>
+                                        <button type="button"
+                                                data-on:click="@put('/admin/users/${u.UserID}/role', {contentType: 'json', payload: {role: 'admin'}})"
+                                                class="text-xs px-2 py-1 rounded-md bg-purple-50 text-purple-700 hover:bg-purple-100">Admin</button>
+                                        <button type="button"
+                                                data-on:click="@put('/admin/users/${u.UserID}/role', {contentType: 'json', payload: {role: 'kitchen'}})"
+                                                class="text-xs px-2 py-1 rounded-md bg-orange-50 text-orange-700 hover:bg-orange-100">Kitchen</button>
+                                        <button type="button"
+                                                data-on:click="@put('/admin/users/${u.UserID}/role', {contentType: 'json', payload: {role: 'delivery'}})"
+                                                class="text-xs px-2 py-1 rounded-md bg-green-50 text-green-700 hover:bg-green-100">Delivery</button>
+                                        <button type="button"
+                                                data-on:click="@put('/admin/users/${u.UserID}/role', {contentType: 'json', payload: {role: 'customer'}})"
+                                                class="text-xs px-2 py-1 rounded-md bg-slate-50 text-slate-600 hover:bg-slate-100">Customer</button>
+                                    </div>
+                                </li>
+                            {/for}
+                        </ul>
+                    {/if}
+                </section>
+
+                <section class="bg-white border border-slate-200 rounded-xl p-5">
+                    <h2 class="text-lg font-semibold text-slate-800 mb-3">Add staff</h2>
+                    <p class="text-xs text-slate-400 mb-4">Create a staff row in advance. They'll sign in via the OAuth flow; the row keyed on their email gets promoted to the role you set here.</p>
+                    <form id="create-user-form" class="space-y-3 text-sm"
+                          data-on:submit__prevent="@post('/admin/users', {contentType: 'form'})">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Email</label>
+                            <input name="email" type="email" required class="w-full px-3 py-2 border border-slate-200 rounded-md" />
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Name</label>
+                            <input name="name" class="w-full px-3 py-2 border border-slate-200 rounded-md" />
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Phone</label>
+                            <input name="phone" class="w-full px-3 py-2 border border-slate-200 rounded-md" />
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Role</label>
+                            <select name="role" class="w-full px-3 py-2 border border-slate-200 rounded-md">
+                                <option value="kitchen">Kitchen</option>
+                                <option value="delivery">Delivery</option>
+                                <option value="admin">Admin</option>
+                                <option value="customer">Customer</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                                class="w-full py-2.5 mt-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                            Add user
+                        </button>
+                    </form>
+                </section>
+            </div>
+        );
+    }
+};

@@ -1,0 +1,14 @@
+store: payments
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-micro/app/services/payments/seed
+entities:
+  - name: payments
+    role: parent
+    file: payments.json
+    fields:
+      - name: PaymentID
+        type: int
+      - name: OrderID
+        type: int
+      - name: Amount
+        type: int

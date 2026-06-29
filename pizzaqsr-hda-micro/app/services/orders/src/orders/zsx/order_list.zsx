@@ -1,0 +1,34 @@
+const std = @import("std");
+const Order = @import("../models/order.zig").Order;
+
+pub const OrderList = struct {
+    orders: []Order,
+
+    pub fn render(self: OrderList, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <div id="content" class="max-w-3xl mx-auto p-4 lg:p-6">
+                <h1 class="text-xl font-semibold text-slate-800 mb-4">Your orders</h1>
+                {if self.orders.len == 0}
+                    <div class="bg-white border border-slate-200 rounded-xl p-10 text-center text-slate-400">
+                        <p class="text-sm">You haven't placed any orders yet.</p>
+                    </div>
+                {else}
+                    <ul class="space-y-3">
+                        {for o in self.orders}
+                            <li class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between hover:shadow-sm transition">
+                                <div class="min-w-0">
+                                    <p class="font-medium text-slate-800 text-sm">Order #{o.OrderID}</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">{o.CreatedAt} &middot; {o.Status}</p>
+                                </div>
+                                <div class="text-right shrink-0 ml-3">
+                                    <p class="text-sm font-semibold text-slate-800">₹{o.Total}</p>
+                                    <a href="/orders/${o.OrderKey}/tracking" class="text-xs text-blue-600 hover:underline">Track</a>
+                                </div>
+                            </li>
+                        {/for}
+                    </ul>
+                {/if}
+            </div>
+        );
+    }
+};

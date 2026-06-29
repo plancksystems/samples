@@ -1,0 +1,10 @@
+store: users
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-micro/app/services/users/seed
+entities:
+  - name: users
+    role: parent
+    file: users.json
+    fields:
+      - name: UserID
+        type: int

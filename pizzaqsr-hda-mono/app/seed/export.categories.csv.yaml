@@ -1,0 +1,10 @@
+store: categories
+format: csv
+output_dir: /Users/kamlesh/plancksystems/samples/pizzaqsr-hda-mono/app/seed/exports
+entities:
+  - name: categories
+    role: parent
+    file: categories.csv
+    fields:
+      - name: CategoryID
+        type: int

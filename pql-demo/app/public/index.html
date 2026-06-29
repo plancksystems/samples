@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PQL Query Guide — Live Examples</title>
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: -apple-system, system-ui, sans-serif; color:#334155; background:#f8fafc; font-size:13px; }
+.navbar { background:white; border-bottom:1px solid #e2e8f0; padding:10px 24px; position:sticky; top:0; z-index:50; box-shadow:0 1px 2px rgba(0,0,0,0.03); display:flex; align-items:center; gap:10px; }
+.navbar-icon { color:#3b82f6; font-size:16px; }
+.navbar-title { font-size:14px; font-weight:600; color:#0f172a; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 20px 20px 80px; }
+.sub { color:#64748b; margin: 0 0 20px; font-size:12px; }
+.sec-head { font-size: 12px; font-weight:600; color:#475569; text-transform:uppercase; letter-spacing:0.04em; margin: 24px 0 8px; padding-bottom:4px; border-bottom: 1px solid #e2e8f0; }
+.q-block { background:white; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px; margin: 0 0 10px; }
+.q-head { display:flex; align-items:center; gap:10px; }
+.q-num { font-size:10px; font-weight:600; color:#94a3b8; min-width:34px; font-variant-numeric: tabular-nums; }
+.q-code { flex:1; margin:0; padding:6px 10px; background:#f1f5f9; border-radius:4px; font-family: ui-monospace, SF Mono, Consolas, monospace; font-size:12px; color:#0f172a; white-space:pre-wrap; word-break:break-word; }
+.q-actions { display:flex; gap:4px; }
+.q-btn { width:28px; height:28px; padding:0; font-size:13px; border:1px solid transparent; border-radius:4px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+.q-btn:disabled { opacity:0.5; cursor:not-allowed; }
+.q-run { background:#3b82f6; color:white; }
+.q-run:hover { background:#2563eb; }
+.q-run.destructive { background:#dc2626; }
+.q-run.destructive:hover { background:#b91c1c; }
+.q-copy { background:#f1f5f9; color:#475569; border-color:#e2e8f0; }
+.q-copy:hover { background:#e2e8f0; color:#0f172a; }
+.q-copy.copied { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.q-block { min-width:0; }
+.q-result { display:none; margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px; min-width:0; }
+.q-result.open { display:block; }
+.r-body { overflow-x:auto; max-width:100%; }
+.r-body::-webkit-scrollbar { height:8px; }
+.r-body::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
+.r-body::-webkit-scrollbar-track { background:#f1f5f9; }
+.r-bar { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; font-size:11px; color:#64748b; margin-bottom:6px; }
+.r-bar .chev { display:inline-block; transition: transform 0.15s; color:#94a3b8; }
+.q-result.collapsed .r-bar .chev { transform: rotate(-90deg); }
+.q-result.collapsed .r-body { display:none; }
+.r-bar .pill { padding:1px 6px; background:#f1f5f9; border-radius:3px; }
+.r-bar .ok { color:#15803d; }
+.r-bar .err { color:#dc2626; }
+.r-table { width:100%; border-collapse:collapse; font-size:12px; background:white; border:1px solid #e2e8f0; border-radius:4px; overflow:hidden; white-space:nowrap; }
+.r-table th { text-align:left; padding:4px 8px; background:#f1f5f9; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0; font-size:11px; }
+.r-table td { padding:3px 8px; border-bottom:1px solid #f1f5f9; font-family: ui-monospace, SF Mono, Consolas, monospace; font-size:11px; color:#0f172a; vertical-align:top; }
+.r-table tr:last-child td { border-bottom:none; }
+.r-table tr.r-data:hover > td { background:#eff6ff; }
+.r-table .r-toggle { width:20px; text-align:center; padding-left:4px; padding-right:4px; }
+.r-table .r-toggle span { display:inline-block; width:14px; height:14px; line-height:13px; text-align:center; cursor:pointer; color:#3b82f6; font-weight:700; user-select:none; }
+.r-table .r-srn { color:#94a3b8; padding-left:6px; padding-right:6px; }
+.r-table .r-sub td { background:#f8fafc; padding:8px 8px 8px 28px; }
+.r-table .r-sub .sub-label { font-size:10px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px; display:block; }
+.r-table .r-sub .sub-host { overflow-x:auto; max-width:100%; margin-bottom:6px; }
+.r-cell .null { color:#cbd5e1; }
+.r-cell .nest { color:#94a3b8; font-style:italic; }
+.r-empty, .r-err { padding:10px; background:#f1f5f9; border-radius:4px; font-size:12px; color:#64748b; }
+.r-err { background:#fef2f2; color:#dc2626; }
+.r-scalar { padding:10px; background:#ecfdf5; border-radius:4px; font-family: ui-monospace, monospace; color:#15803d; font-weight:600; font-size:13px; }
+.spinner { display:inline-block; width:10px; height:10px; border:2px solid #e2e8f0; border-top-color:#3b82f6; border-radius:50%; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.setup-btn { margin-left:auto; padding:5px 12px; font-size:12px; font-weight:500; color:white; background:#3b82f6; border:none; border-radius:4px; cursor:pointer; }
+.setup-btn:hover { background:#2563eb; }
+.setup-btn:disabled { opacity:0.6; cursor:not-allowed; }
+.setup-status { margin-left:10px; font-size:12px; color:#64748b; }
+.setup-status.ok { color:#15803d; }
+.setup-status.err { color:#dc2626; }
+</style>
+</head>
+<body>
+<nav class="navbar"><span class="navbar-icon">⚡</span><span class="navbar-title">PQL Query Guide — Live Examples</span><button id="setup-btn" class="setup-btn" title="Create stores + indexes for the demo dataset">Setup schema</button><span id="setup-status" class="setup-status"></span></nav>
+<div class="wrap" id="root">
+<p class="sub">Every example from <code>yql-guide.md</code> runs against this app's planck/db. Read queries are safe; mutations (sections 22–24) prompt for confirmation. Click result header to collapse.</p>
+</div>
+
+<script>
+const CATALOG = [
+  { section:1, section_title:"Count", query:"orders.count()" },
+  { section:1, section_title:"Count", query:"orders.filter(EmployeeID = 289).count()" },
+  { section:1, section_title:"Count", query:"vendors.filter(ActiveFlag = 1).count()" },
+  { section:1, section_title:"Count", query:"products.filter(MakeFlag = 1).count()" },
+  { section:2, section_title:"Filter - Equality", query:'employees.filter(Gender = "M").count()' },
+  { section:2, section_title:"Filter - Equality", query:"employees.filter(EmployeeID = 274).count()" },
+  { section:2, section_title:"Filter - Equality", query:"products.filter(SubCategoryID = 14).count()" },
+  { section:2, section_title:"Filter - Equality", query:'productcategories.filter(CategoryName = "Bikes").count()' },
+  { section:3, section_title:"Filter - Comparison Operators", query:"orders.filter(TotalDue > 50000).count()" },
+  { section:3, section_title:"Filter - Comparison Operators", query:"orders.filter(TotalDue < 100).count()" },
+  { section:3, section_title:"Filter - Comparison Operators", query:"orders.filter(TotalDue >= 100000).count()" },
+  { section:3, section_title:"Filter - Comparison Operators", query:"products.filter(ListPrice > 1000).count()" },
+  { section:3, section_title:"Filter - Comparison Operators", query:"vendors.filter(CreditRating != 1).count()" },
+  { section:4, section_title:"Compound Filters (AND)", query:"orders.filter(EmployeeID = 289 and CustomerID = 1045).count()" },
+  { section:4, section_title:"Compound Filters (AND)", query:'employees.filter(Gender = "M" and MaritalStatus = "M").count()' },
+  { section:4, section_title:"Compound Filters (AND)", query:"orders.filter(EmployeeID >= 285 and EmployeeID <= 287).count()" },
+  { section:5, section_title:"Limit & Skip", query:"orders.limit(10).count()" },
+  { section:5, section_title:"Limit & Skip", query:"orders.skip(3800).count()" },
+  { section:5, section_title:"Limit & Skip", query:"customers.limit(100).count()" },
+  { section:6, section_title:"OrderBy (Sorting)", query:"products.orderBy(ListPrice, desc).limit(5)" },
+  { section:6, section_title:"OrderBy (Sorting)", query:"products.orderBy(ListPrice, asc).limit(5)" },
+  { section:6, section_title:"OrderBy (Sorting)", query:"employees.orderBy(EmployeeID, asc).limit(3)" },
+  { section:6, section_title:"OrderBy (Sorting)", query:"employees.orderBy(EmployeeID, desc).limit(3)" },
+  { section:7, section_title:"Multi-Sort", query:"orders.orderBy(EmployeeID, asc).orderBy(TotalDue, desc).limit(10)" },
+  { section:7, section_title:"Multi-Sort", query:"employees.orderBy(Gender, asc).orderBy(EmployeeID, desc).limit(10)" },
+  { section:7, section_title:"Multi-Sort", query:"orders.filter(EmployeeID >= 285).orderBy(EmployeeID, asc).orderBy(TotalDue, asc).limit(20)" },
+  { section:8, section_title:"Projection (pluck)", query:"employees.filter(EmployeeID = 274).pluck(EmployeeID, FullName)" },
+  { section:8, section_title:"Projection (pluck)", query:"products.filter(SubCategoryID = 14).limit(1).pluck(ProductName, ListPrice)" },
+  { section:8, section_title:"Projection (pluck)", query:"employees.limit(1).pluck(EmployeeID)" },
+  { section:8, section_title:"Projection (pluck)", query:"orders.filter(EmployeeID = 289).orderBy(TotalDue, desc).limit(1).pluck(EmployeeID, TotalDue)" },
+  { section:9, section_title:"Aggregation - Count", query:"orders.aggregate(total: count)" },
+  { section:9, section_title:"Aggregation - Count", query:"orders.filter(EmployeeID = 289).aggregate(total: count)" },
+  { section:9, section_title:"Aggregation - Count", query:"products.filter(MakeFlag = 1).aggregate(n: count)" },
+  { section:10, section_title:"Aggregation - Sum, Avg, Min, Max", query:"orders.aggregate(total: sum(TotalDue))" },
+  { section:10, section_title:"Aggregation - Sum, Avg, Min, Max", query:"orders.aggregate(avg_total: avg(TotalDue))" },
+  { section:10, section_title:"Aggregation - Sum, Avg, Min, Max", query:"orders.aggregate(min_total: min(TotalDue))" },
+  { section:10, section_title:"Aggregation - Sum, Avg, Min, Max", query:"orders.aggregate(max_total: max(TotalDue))" },
+  { section:10, section_title:"Aggregation - Sum, Avg, Min, Max", query:"orders.filter(EmployeeID = 289).aggregate(revenue: sum(TotalDue))" },
+  { section:11, section_title:"GroupBy", query:"orders.groupBy(EmployeeID).aggregate(n: count)" },
+  { section:11, section_title:"GroupBy", query:"employees.groupBy(Gender).aggregate(n: count)" },
+  { section:11, section_title:"GroupBy", query:"employees.groupBy(Gender, MaritalStatus).aggregate(n: count)" },
+  { section:11, section_title:"GroupBy", query:"orders.groupBy(EmployeeID).aggregate(n: count, total: sum(TotalDue))" },
+  { section:12, section_title:"Filter + GroupBy", query:"orders.filter(TotalDue > 10000).groupBy(EmployeeID).aggregate(n: count)" },
+  { section:12, section_title:"Filter + GroupBy", query:"products.filter(ListPrice > 0).groupBy(SubCategoryID).aggregate(n: count, avg_price: avg(ListPrice))" },
+  { section:12, section_title:"Filter + GroupBy", query:"orders.filter(EmployeeID = 289).groupBy(CustomerID).aggregate(n: count, total: sum(TotalDue))" },
+  { section:13, section_title:"$in Operator", query:"orders.filter(EmployeeID in [289, 288]).count()" },
+  { section:13, section_title:"$in Operator", query:"orders.filter(EmployeeID in [289, 287, 285]).count()" },
+  { section:13, section_title:"$in Operator", query:"products.filter(SubCategoryID in [1, 2, 14]).count()" },
+  { section:13, section_title:"$in Operator", query:'employees.filter(Gender in ["M"]).count()' },
+  { section:14, section_title:"$contains Operator", query:'products.filter(ProductName contains "Road").count()' },
+  { section:14, section_title:"$contains Operator", query:'products.filter(ProductName contains "Mountain").count()' },
+  { section:14, section_title:"$contains Operator", query:'products.filter(ProductName contains "Frame").count()' },
+  { section:14, section_title:"$contains Operator", query:'vendors.filter(VendorName contains "Bike").count()' },
+  { section:15, section_title:"$startsWith Operator", query:'products.filter(ProductName startsWith "HL").count()' },
+  { section:15, section_title:"$startsWith Operator", query:'products.filter(ProductName startsWith "Mountain").count()' },
+  { section:15, section_title:"$startsWith Operator", query:'employees.filter(FirstName startsWith "S").count()' },
+  { section:16, section_title:"$exists Operator", query:"products.filter(ProductName exists true).count()" },
+  { section:16, section_title:"$exists Operator", query:"employees.filter(Gender exists true).count()" },
+  { section:17, section_title:"$regex Operator", query:'products.filter(ProductName ~ "^HL").count()' },
+  { section:17, section_title:"$regex Operator", query:'products.filter(ProductName ~ "Frame").count()' },
+  { section:17, section_title:"$regex Operator", query:'products.filter(ProductName ~ "58$").count()' },
+  { section:17, section_title:"$regex Operator", query:'products.filter(ProductName ~ "^AWC Logo Cap$").count()' },
+  { section:18, section_title:"OR Filters", query:'employees.filter(Gender = "M" or MaritalStatus = "S").count()' },
+  { section:18, section_title:"OR Filters", query:'products.filter(ProductName contains "Road" or ProductName contains "Mountain").count()' },
+  { section:18, section_title:"OR Filters", query:"products.filter(SubCategoryID = 1 or SubCategoryID = 2).count()" },
+  { section:18, section_title:"OR Filters", query:"orders.filter(TotalDue > 100000 or TotalDue < 100).count()" },
+  { section:18, section_title:"OR Filters", query:"orders.filter(EmployeeID = 289 or EmployeeID = 288).count()" },
+  { section:19, section_title:"Range Scans (closed)", query:"orders.filter(EmployeeID >= 285 and EmployeeID <= 287).count()" },
+  { section:19, section_title:"Range Scans (open)", query:"orders.filter(EmployeeID > 285 and EmployeeID < 289).count()" },
+  { section:19, section_title:"Range Scans (one-sided)", query:"orders.filter(EmployeeID > 288).count()" },
+  { section:19, section_title:"Range Scans (one-sided)", query:"orders.filter(EmployeeID < 285).count()" },
+  { section:20, section_title:"$between Operator", query:"orders.filter(TotalDue between 100 and 5000).count()" },
+  { section:20, section_title:"$between Operator", query:"products.filter(ListPrice between 10.0 and 50.0).count()" },
+  { section:20, section_title:"$between Operator", query:"employees.filter(EmployeeID between 280 and 290).count()" },
+  { section:20, section_title:"$between Operator", query:"products.filter(ListPrice between 10.0 and 50.0 and MakeFlag = 1).count()" },
+  { section:20, section_title:"$between Operator", query:"orders.filter(EmployeeID between 285 and 289).orderBy(TotalDue, desc).limit(10)" },
+  { section:21, section_title:"Nested Field Access", query:'customers.filter(Address.City = "New York").count()' },
+  { section:21, section_title:"Nested Field Access", query:'customers.filter(Address.State = "CA").count()' },
+  { section:21, section_title:"Nested Field Access", query:'customers.filter(Address.Country = "US").count()' },
+  { section:21, section_title:"Nested Field Access", query:'customers.filter(Address.City = "Seattle").count()' },
+  { section:22, section_title:"Insert", destructive:true, query:'products.insert({"ProductID": 9001, "ProductName": "Test Widget", "ListPrice": 99.99, "SubCategoryID": 1})' },
+  { section:22, section_title:"Insert", destructive:true, query:'vendors.insert({"VendorID": 9001, "VendorName": "Test Vendor", "CreditRating": 3, "ActiveFlag": 1})' },
+  { section:22, section_title:"Insert", destructive:true, query:'productcategories.insert({"CategoryID": 99, "CategoryName": "TestCategory"})' },
+  { section:23, section_title:"Update (set)", destructive:true, query:'products.filter(ProductID = 9001).set({"ListPrice": 149.99})' },
+  { section:23, section_title:"Update (set)", destructive:true, query:'vendors.filter(VendorName = "Test Vendor").set({"CreditRating": 5})' },
+  { section:23, section_title:"Update (set)", destructive:true, query:'products.filter(MakeFlag = 1 and ListPrice > 100).set({"StandardCost": 75.00})' },
+  { section:23, section_title:"Update (set)", destructive:true, query:'products.filter(ProductID = 9001).set({"ListPrice": 199.99, "StandardCost": 80.00})' },
+  { section:24, section_title:"Delete", destructive:true, query:"products.filter(ProductID = 9001).delete()" },
+  { section:24, section_title:"Delete", destructive:true, query:"vendors.filter(ActiveFlag = 0).delete()" },
+  { section:24, section_title:"Delete", destructive:true, query:"products.filter(MakeFlag = 0 and ListPrice < 5).delete()" },
+  { section:25, section_title:"Get by Key", query:"products.limit(1)" },
+  { section:25, section_title:"Get by Key", query:"products.get(00680400000018b8434c192c4f880000)" },
+  { section:25, section_title:"Get by Key", query:"products.get(0x00680400000018b8434c192c4f880000)" },
+  { section:26, section_title:"Delete by Key", destructive:true, query:"products.delete(00680400000018b8434c192c4f880000)" },
+];
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function isExpandable(v){return v!==null && typeof v==='object';}
+function renderCell(v){
+  if(v===null||v===undefined) return '<span class="null">-</span>';
+  if(Array.isArray(v)) return '<span class="nest">Array['+v.length+']</span>';
+  if(typeof v==='object') return '<span class="nest">{...}</span>';
+  return esc(v);
+}
+function columnsOf(rows){
+  const cols=new Set();
+  for(let i=0;i<Math.min(rows.length,100);i++){
+    const r=rows[i];
+    if(r && typeof r==='object' && !Array.isArray(r)) Object.keys(r).forEach(k=>cols.add(k));
+  }
+  return [...cols];
+}
+function buildTable(data){
+  let isArr = Array.isArray(data), rows, cols;
+  if(isArr){
+    rows = data.filter(r => r && typeof r==='object' && !Array.isArray(r));
+    cols = columnsOf(rows);
+  }else{
+    rows = Object.entries(data).map(([k,v])=>({_key:k,_value:v}));
+    cols = ['Key','Value'];
+  }
+  let head = '<tr><th class="r-toggle"></th><th class="r-srn">#</th>'+cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
+  let body = '';
+  rows.forEach((row, idx) => {
+    const expandables = isArr
+      ? Object.entries(row).filter(([,v])=>isExpandable(v))
+      : (isExpandable(row._value) ? [[row._key, row._value]] : []);
+    const hasExpand = expandables.length > 0;
+    body += '<tr class="r-data" data-row-idx="'+idx+'">';
+    body += '<td class="r-toggle">'+(hasExpand?'<span data-act="expand">+</span>':'')+'</td>';
+    body += '<td class="r-srn">'+(idx+1)+'</td>';
+    if(isArr){
+      cols.forEach(c => { body += '<td class="r-cell">'+renderCell(row[c])+'</td>'; });
+    }else{
+      body += '<td class="r-cell" style="color:#64748b;font-weight:500">'+esc(row._key)+'</td>';
+      body += '<td class="r-cell">'+renderCell(row._value)+'</td>';
+    }
+    body += '</tr>';
+    if(hasExpand){
+      body += '<tr class="r-sub" data-sub-of="'+idx+'" style="display:none"><td></td><td colspan="'+(cols.length+1)+'" class="r-sub-host"></td></tr>';
+    }
+  });
+  return { html:'<table class="r-table"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>', rowsByIdx:rows, isArr };
+}
+function wireTable(tableEl, built){
+  tableEl.querySelectorAll('span[data-act="expand"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const row = btn.closest('tr.r-data');
+      const idx = +row.dataset.rowIdx;
+      const sub = tableEl.querySelector('tr.r-sub[data-sub-of="'+idx+'"]');
+      if(!sub) return;
+      const open = sub.style.display !== 'none';
+      if(open){ sub.style.display='none'; btn.textContent='+'; return; }
+      const host = sub.querySelector('.r-sub-host');
+      if(!host.dataset.built){
+        const r = built.rowsByIdx[idx];
+        const entries = built.isArr
+          ? Object.entries(r).filter(([,v])=>isExpandable(v))
+          : [[r._key, r._value]];
+        const parts = []; const nested = [];
+        for(const [k, v] of entries){
+          parts.push('<span class="sub-label">'+esc(k)+'</span>');
+          const sb = buildTable(v); parts.push('<div class="sub-host">'+sb.html+'</div>'); nested.push(sb);
+        }
+        host.innerHTML = parts.join('');
+        host.querySelectorAll('table.r-table').forEach((t, i) => { if(nested[i]) wireTable(t, nested[i]); });
+        host.dataset.built = '1';
+      }
+      sub.style.display=''; btn.textContent='−';
+    });
+  });
+}
+function renderResult(box, payload, count, elapsed){
+  const bar = '<div class="r-bar" data-act="toggle"><span class="chev">▾</span><span class="pill ok">ok</span><span>'+count+(count===1?' row':' rows')+'</span><span>'+elapsed+' ms</span><span style="margin-left:auto;color:#cbd5e1">click to collapse</span></div>';
+  if(!Array.isArray(payload)||payload.length===0){ box.innerHTML = bar + '<div class="r-body"><div class="r-empty">no rows</div></div>'; return; }
+  if(payload.length===1 && Object.keys(payload[0]).length===1){
+    const k = Object.keys(payload[0])[0]; const v = payload[0][k];
+    box.innerHTML = bar + '<div class="r-body"><div class="r-scalar">'+esc(k)+': '+(isExpandable(v)?esc(JSON.stringify(v)):esc(v))+'</div></div>';
+    return;
+  }
+  const built = buildTable(payload);
+  box.innerHTML = bar + '<div class="r-body">' + built.html + '</div>';
+  const tbl = box.querySelector('table.r-table'); if (tbl) wireTable(tbl, built);
+}
+async function runBlock(btn){
+  const block = btn.closest('.q-block');
+  const query = block.querySelector('.q-code').textContent;
+  const destructive = block.dataset.destructive === 'true';
+  if(destructive){ if(!confirm('This query mutates data:\n\n'+query+'\n\nProceed?')) return; }
+  const box = block.querySelector('.q-result');
+  box.classList.add('open'); box.classList.remove('collapsed');
+  box.innerHTML = '<div class="r-bar"><span class="spinner"></span><span>running…</span></div>';
+  btn.disabled = true;
+  const t0 = performance.now();
+  try {
+    const r = await fetch('/api/pql/run', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ query }) });
+    const j = await r.json();
+    const elapsed = Math.round(performance.now()-t0);
+    if(!j.success){
+      box.innerHTML = '<div class="r-bar"><span class="chev">▾</span><span class="pill err">error</span><span>'+elapsed+' ms</span></div><div class="r-body"><div class="r-err">'+esc(j.error||'unknown error')+'</div></div>';
+      return;
+    }
+    renderResult(box, j.data, j.count ?? (Array.isArray(j.data)?j.data.length:0), elapsed);
+  } catch (e) {
+    box.innerHTML = '<div class="r-bar"><span class="chev">▾</span><span class="pill err">error</span></div><div class="r-body"><div class="r-err">'+esc(e.message)+'</div></div>';
+  } finally { btn.disabled = false; }
+}
+
+const COPY_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+const CHECK_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+(function(){
+  const root = document.getElementById('root');
+  let currentSection = 0, idxInSection = 0;
+  for (const item of CATALOG) {
+    if (item.section !== currentSection) { currentSection = item.section; idxInSection = 1;
+      const h = document.createElement('div'); h.className = 'sec-head'; h.textContent = item.section + '. ' + item.section_title; root.appendChild(h);
+    } else { idxInSection += 1; }
+    const block = document.createElement('div'); block.className = 'q-block'; block.dataset.destructive = item.destructive ? 'true' : 'false';
+    block.innerHTML =
+      '<div class="q-head"><span class="q-num">' + item.section + '.' + idxInSection + '</span>' +
+      '<pre class="q-code"></pre>' +
+      '<div class="q-actions">' +
+        '<button class="q-btn q-copy" title="Copy query" aria-label="Copy query">' + COPY_ICON + '</button>' +
+        '<button class="q-btn q-run' + (item.destructive ? ' destructive' : '') + '" title="Run query" aria-label="Run query">▶</button>' +
+      '</div></div>' +
+      '<div class="q-result"></div>';
+    block.querySelector('.q-code').textContent = item.query;
+    root.appendChild(block);
+  }
+  document.querySelectorAll('.q-run').forEach(b => b.addEventListener('click', () => runBlock(b)));
+  document.querySelectorAll('.q-copy').forEach(b => b.addEventListener('click', async () => {
+    const code = b.closest('.q-block').querySelector('.q-code').textContent;
+    try {
+      await navigator.clipboard.writeText(code);
+      b.classList.add('copied'); const orig = b.innerHTML; b.innerHTML = CHECK_ICON;
+      setTimeout(() => { b.classList.remove('copied'); b.innerHTML = orig; }, 1200);
+    } catch (e) { b.title = 'Copy failed: ' + e.message; }
+  }));
+  document.addEventListener('click', (e) => {
+    const bar = e.target.closest('.r-bar');
+    if (bar && bar.dataset.act === 'toggle') {
+      const result = bar.closest('.q-result'); if (result) result.classList.toggle('collapsed');
+    }
+  });
+
+  const setupBtn = document.getElementById('setup-btn');
+  const setupStatus = document.getElementById('setup-status');
+  setupBtn.addEventListener('click', async () => {
+    setupBtn.disabled = true;
+    setupStatus.className = 'setup-status';
+    setupStatus.innerHTML = '<span class="spinner"></span> running…';
+    try {
+      const r = await fetch('/api/setup', { method:'POST' });
+      const j = await r.json();
+      if (j.success) {
+        setupStatus.className = 'setup-status ok';
+        setupStatus.textContent = 'stores: ' + j.stores.created + ' created, ' + j.stores.skipped + ' already there · indexes: ' + j.indexes.created + ' created, ' + j.indexes.skipped + ' already there';
+      } else {
+        setupStatus.className = 'setup-status err';
+        setupStatus.textContent = 'setup failed: ' + (j.error || 'unknown');
+      }
+    } catch (e) {
+      setupStatus.className = 'setup-status err';
+      setupStatus.textContent = 'setup request failed: ' + e.message;
+    } finally {
+      setupBtn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

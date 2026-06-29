@@ -1,0 +1,102 @@
+const std = @import("std");
+const Order = @import("../models/order.zig").Order;
+
+pub const OrderDetail = struct {
+    order: Order,
+    sse_init: []const u8 = "",
+
+    pub fn render(self: OrderDetail, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <div id="order-tracking-${self.order.OrderKey}" class="max-w-xl mx-auto p-4 lg:p-6"
+                 data-init="${self.sse_init}">
+                <a href="/orders" data-on:click__prevent="@get('/orders')" class="text-sm text-blue-600 hover:underline">&larr; Back to orders</a>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 mt-3 mb-4 shadow-sm text-center">
+                    <div class="text-5xl mb-3">{self.order.statusBadge()}</div>
+                    <h1 class="text-xl font-bold text-slate-800 mb-1">Tracking order #{self.order.OrderID}</h1>
+                    <p class="text-slate-500 text-sm mb-3">{self.order.statusMessage()}</p>
+                    <p class="text-xs text-slate-400">Total: <span class="font-semibold text-slate-600">₹{self.order.Total}</span></p>
+                </div>
+
+                {if self.order.isCancelled()}
+                    <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-5 text-center text-sm">
+                        This order was cancelled. The payment, if collected, will be refunded.
+                    </div>
+                {else}
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Order progress</h2>
+                        <ol class="space-y-4">
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("AwaitingPayment")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("AwaitingPayment", "Paid")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("AwaitingPayment", "Paid")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Order placed</div>
+                                    <div class="text-xs">Waiting for payment</div>
+                                </div>
+                            </li>
+
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("Paid")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("Paid", "Preparing")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("Paid", "Preparing")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Payment received</div>
+                                    <div class="text-xs">Sent to kitchen</div>
+                                </div>
+                            </li>
+
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("Preparing")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("Preparing", "Ready")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("Preparing", "Ready")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Preparing your order</div>
+                                    <div class="text-xs">In the kitchen</div>
+                                </div>
+                            </li>
+
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("Ready")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("Ready", "OutForDelivery")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("Ready", "OutForDelivery")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Ready for pickup</div>
+                                    <div class="text-xs">Waiting for delivery</div>
+                                </div>
+                            </li>
+
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("OutForDelivery")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("OutForDelivery", "Delivered")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("OutForDelivery", "Delivered")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Out for delivery</div>
+                                    <div class="text-xs">On the way to you</div>
+                                </div>
+                            </li>
+
+                            <li class='flex items-start gap-3 ${self.order.stepTextClass("Delivered")}'>
+                                <div class='w-7 h-7 rounded-full border-2 ${self.order.stepRingClass("Delivered", "")} flex items-center justify-center shrink-0'>
+                                    <div class='w-3 h-3 rounded-full ${self.order.stepDotClass("Delivered", "")}'></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">Delivered</div>
+                                    <div class="text-xs">Enjoy your meal!</div>
+                                </div>
+                            </li>
+                        </ol>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live updates</span>
+                            <a href="/" data-on:click__prevent="@get('/')" class="text-blue-600 hover:underline font-medium">Order again &rarr;</a>
+                        </div>
+                    </div>
+                {/if}
+
+            </div>
+        );
+    }
+};
+
+

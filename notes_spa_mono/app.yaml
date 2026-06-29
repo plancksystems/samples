@@ -1,0 +1,6 @@
+
+app:
+  name: notes_spa_mono
+  description: "SPA monolith starter (Vue + planck/db WASM)"
+  port: 4200
+  address: 127.0.0.1

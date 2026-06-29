@@ -1,0 +1,14 @@
+const std = @import("std");
+
+pub const CartBadge = struct {
+    total: u32,
+
+    pub fn render(self: CartBadge, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
+        return (
+            <span id="cart-badge"
+                  class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">
+                {self.total}
+            </span>
+        );
+    }
+};

@@ -1,0 +1,12 @@
+store: vendorproduct
+format: json
+output_dir: /Users/kamlesh/plancksystems/samples/pql-demo/app/seed
+entities:
+  - name: vendorproduct
+    role: parent
+    file: vendorproduct.json
+    fields:
+      - name: ProductID
+        type: int
+      - name: VendorID
+        type: int
