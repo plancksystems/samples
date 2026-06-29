@@ -23,9 +23,9 @@
             .url = "https://github.com/plancksystems/utils/archive/refs/tags/v0.1.0.tar.gz",
             .hash = "utils-0.1.0-Ldej_uoMAgDQwHU3AW65leDiU91ICJlDBmzvjobZhGWr",
         },
-         .schnell = .{
+        .schnell = .{
             .url = "https://github.com/plancksystems/schnell-zig/archive/refs/tags/v0.3.0.tar.gz",
-            .hash = "schnell-0.1.0-mz-7QKfFBQCBb_1q8NGDqh_UFxtDY35UAL2TKu0upXKL",
+            .hash = "schnell-0.1.0-mz-7QPi9BQDC6vkDhh9HUlXBKnhG-hSkt3UBEAX4rqFZ",
         },
     },
     .paths = .{ "build.zig", "build.zig.zon", "src" },
